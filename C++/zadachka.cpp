@@ -16,27 +16,19 @@ class Rational
     }
 
     double convert() const {
-        double num = numerator;
-        double denom = denominator;
-        return num / denom;
+        return double(numerator) / double(denominator);
     }
 
     Rational add(const Rational& sn) const {
-        int num = numerator * sn.denominator + sn.numerator * denominator;
-        int den = denominator * sn.denominator;
-        return Rational(num, den);
+        return Rational((numerator * sn.denominator + sn.numerator * denominator), (denominator * sn.denominator));
     }
 
     Rational sub(const Rational& sn) const {
-        int num = numerator * sn.denominator - sn.numerator * denominator;
-        int den = denominator * sn.denominator;
-        return Rational(num, den);
+        return Rational((numerator * sn.denominator - sn.numerator * denominator), (denominator * sn.denominator));
     }
 
     Rational mul(const Rational& sn) const {
-        int num = numerator * sn.numerator;
-        int den = denominator * sn.denominator;
-        return Rational(num, den);
+        return Rational((numerator * sn.numerator), (denominator * sn.denominator));
     }
 
     // >
