@@ -14,6 +14,7 @@ class Complex
         return *this; 
     }
     const Complex operator++(int) { 
+        //return Complex(re++, im++); // в одну строчку
         Complex t(*this); 
         re++; im++; 
         return t; 
