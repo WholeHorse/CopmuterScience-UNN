@@ -1,0 +1,10 @@
+public class Test {// объявляется класс Test
+
+    public static void main(String[] args) {// так включаются программы,
+                                           // просто запомнить
+       int i = (int) (Math.random() * 100 + 1);
+
+    System.out.println("Загрузка мощности:" + i + " %");
+
+    }
+}
