@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <cstring>
 #include <iostream>
 using namespace std;
@@ -70,11 +71,44 @@ class String{
 
     String operator+(const String & str) const{
         String sum(str.size + 1 + size);
-        sum.buffer = buffer + str.buffer;
+        strcpy(sum.buffer, buffer);
+        strcat(sum.buffer, str.buffer);
         return sum;
     }
 
+    String& operator+=(const String & str){
+        int new_size = size + str.size;
+        char* new_buffer = new char[size + str.size + 1];
+        strcpy(new_buffer, buffer);
+        strcat(new_buffer, str.buffer);
+        delete[] buffer;
+        buffer = new_buffer;
+        size = new_size;
+        return *this;
+    }
 
+    friend istream & operator >>(istream& in, String& str) {
+        delete [] str.buffer;
+        char ch;
+        int chunk_size = 10;
+        int i = 0;
+        int buffer_size;
+        char* buffer = new char[chunk_size];
+        while (in.get(ch) && ch != '\n') {
+            if (i == buffer_size - 1) {
+                buffer_size += chunk_size;
+                char* new_buffer = new char[buffer_size];
+                strncpy(new_buffer, buffer, i);
+                delete[] buffer;
+                buffer = new_buffer;
+                }
+            buffer[i++] = ch;
+        }
+        buffer[i] = '\0';
+        str.buffer = buffer;
+        str.size = i;
+        return in;
+    }
 
     friend ostream & operator <<(ostream& out, const String& str){
         if (str.size == 0){
@@ -82,23 +116,19 @@ class String{
             return out;
         }
         else{
-            cout << "string = " << str.buffer << endl << "size = " << str.size;
+            cout << "string = " << str.buffer << " size = " << str.size;
             return out;
         }
         
     }
 };
 
-/*
-    cin, +=, +
-*/
-
-
 int main()
 {
     //const String str1 = "ABCDEF";
     String str1 = "ABCDEF";
     String str2("ABC1231321CEF");
+    String str3 = "BOBS";
     /*String str3 = str2;
 
     str3[1] = 'A';
@@ -110,7 +140,9 @@ int main()
     str1[0] = 'X';
     cout<<str2;
     */
-
-
+    str1 += str2;
+    cout << str1 << endl; 
+    cin >> str3;
+    cout << str3;
     return 0;
 }
