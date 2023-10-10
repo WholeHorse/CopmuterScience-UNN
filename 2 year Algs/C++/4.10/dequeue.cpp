@@ -2,7 +2,7 @@
 #include <iostream>
 #define SIZE 6
 using namespace std;
-
+// переделать в динамический массив
 class Dequeue {
     int buffer[SIZE];
     int start = -1;
