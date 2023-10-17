@@ -1,15 +1,55 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#define SIZE 6
 using namespace std;
-// переделать в динамический массив
+
 class Dequeue {
-    int buffer[SIZE];
+    int *buffer;
+    int SIZE;
     int start = -1;
     int end = -1;
 
     public:
-    Dequeue() = default;
+    Dequeue(int size = 6) : SIZE(size) {
+        buffer = new int[SIZE];
+    }
+
+    Dequeue(const Dequeue& other) : SIZE(other.SIZE), start(other.start), end(other.end) {
+        buffer = new int[SIZE];
+        for (int i = 0; i < SIZE; ++i) {
+            buffer[i] = other.buffer[i];
+        }
+    }
+
+    Dequeue& operator=(const Dequeue& other) {
+        if (this != &other) {
+            delete[] buffer;
+
+            SIZE = other.SIZE;
+            start = other.start;
+            end = other.end;
+            buffer = new int[SIZE];
+            for (int i = 0; i < SIZE; ++i) {
+                buffer[i] = other.buffer[i];
+            }
+        }
+        return *this;
+    }
+
+    ~Dequeue() {
+        delete[] buffer;
+    }
+
+    void resize(int new_size) {
+        int* new_buffer = new int[new_size];
+        int current_size = size();
+        for (int i = 0; i < current_size; ++i) {
+            new_buffer[i] = buffer[(start + i) % SIZE];
+        }
+        delete[] buffer;
+        buffer = new_buffer;
+        SIZE = new_size;
+        start = 0;
+        end = current_size - 1;
+    }
 
     bool IsEmpty() const {return end == -1 && start == -1;}
     bool IsFull() const {return ((end + 1) % SIZE == start);}
@@ -18,8 +58,7 @@ class Dequeue {
 
     bool push_front(int element){
         if(IsFull()) {
-            cerr << "Queue is full! \n";
-            return false;
+            resize(SIZE * 2);
             }
         if (IsEmpty()) start = end = 0;
         else start = (start - 1 + SIZE) % SIZE;
@@ -28,8 +67,7 @@ class Dequeue {
     }
     bool push_back(int element){
         if(IsFull()) {
-            cerr << "Queue is full! \n";
-            return false;
+            resize(SIZE * 2);
             }
         if (IsEmpty()) start = end = 0;
         else end = (end + 1) % SIZE;
@@ -77,12 +115,15 @@ class Dequeue {
 
 int main()
 {
-    Dequeue queue;
+    Dequeue queue1;
     for(int i = 0; i < 7; i++){
-        queue.push_back(i);
+        queue1.push_back(i);
     }
-    queue.pop_back();
-    queue.print();
+    Dequeue queue2 = queue1;
+
+    queue2.print();
+    queue1.reset();
+    queue2.print();
 
     return 0;
 }
