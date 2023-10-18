@@ -14,22 +14,17 @@ class Dequeue {
 
     Dequeue(const Dequeue& other) : SIZE(other.SIZE), start(other.start), end(other.end) {
         buffer = new int[SIZE];
-        for (int i = 0; i < SIZE; ++i) {
-            buffer[i] = other.buffer[i];
-        }
+        memcpy(buffer, other.buffer, SIZE * sizeof(int));
     }
 
     Dequeue& operator=(const Dequeue& other) {
         if (this != &other) {
             delete[] buffer;
-
             SIZE = other.SIZE;
             start = other.start;
             end = other.end;
             buffer = new int[SIZE];
-            for (int i = 0; i < SIZE; ++i) {
-                buffer[i] = other.buffer[i];
-            }
+            copy(other.buffer, other.buffer + SIZE, buffer);
         }
         return *this;
     }
@@ -37,6 +32,12 @@ class Dequeue {
     ~Dequeue() {
         delete[] buffer;
     }
+
+    bool IsEmpty() const {return end == -1 && start == -1;}
+
+    bool IsFull() const {return ((end + 1) % SIZE == start);}
+
+    void reset() {start = -1; end = -1;}
 
     void resize(int new_size) {
         int* new_buffer = new int[new_size];
@@ -51,11 +52,6 @@ class Dequeue {
         end = current_size - 1;
     }
 
-    bool IsEmpty() const {return end == -1 && start == -1;}
-    bool IsFull() const {return ((end + 1) % SIZE == start);}
-
-    void reset() {start = -1; end = -1;}
-
     bool push_front(int element){
         if(IsFull()) {
             resize(SIZE * 2);
@@ -65,6 +61,7 @@ class Dequeue {
         buffer[start] = element;
         return true;
     }
+
     bool push_back(int element){
         if(IsFull()) {
             resize(SIZE * 2);
@@ -81,6 +78,7 @@ class Dequeue {
         else start = (start + 1) % SIZE;
         return true;
     }
+
     bool pop_back(){
         if (IsEmpty()) return false;
         if (start == end) reset();
@@ -92,6 +90,7 @@ class Dequeue {
         if(IsEmpty() == 1) exit(1);
         return buffer[start];
     }
+
     int get_back() const {
         if(IsEmpty()) exit(1);
         return buffer[end];
