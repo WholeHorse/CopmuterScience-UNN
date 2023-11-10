@@ -41,7 +41,35 @@ using namespace std;
     5. В конце выталкиваем все операторы из стека в конечную строку.
 */
 
-int main() {
+/*
+    Перенести непробельные символы в другое место
+    Проверить верность скобок
 
+*/
+
+bool removeSpaces(string &str){
+    stack<char> brackets;
+    string noSpace = "";
+    for(char& c : str){
+        if(c != ' '){
+            noSpace += c;
+        }
+        if(c == '('){
+            brackets.push(c);
+        } else if(c == ')'){
+            if(brackets.empty()){
+                return false;
+            }
+            brackets.pop();
+        }
+    }
+    str = noSpace;
+    return brackets.empty();
+}
+
+int main(){
+    string str = "(3 + 2 - 3)";
+    bool isValid = removeSpaces(str);
+    cout << str << " " << isValid << endl;
     return 0;
 }

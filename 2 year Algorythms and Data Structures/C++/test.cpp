@@ -1,2 +1,8 @@
-// calc with stack 
-// 3 4 + 5 * = 35 baza
+#include <iostream>
+using namespace std;
+
+int main(){
+    
+
+    return 0;
+}
