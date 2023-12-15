@@ -41,10 +41,7 @@ using namespace std;
     5. В конце выталкиваем все операторы из стека в конечную строку.
 */
 
-/*
-    заменить унарные - на ~
-*/
-
+// removeSpaces() - удаляет все пробелы из строки и возвращает true, если скобочная последовательность корректна
 bool removeSpaces(string &str){
     stack<char> brackets;
     string noSpace = "";
@@ -65,9 +62,30 @@ bool removeSpaces(string &str){
     return brackets.empty();
 }
 
-int main(){
-    string str = "(3 + 2 - 3)";
+//replaceUnaryMinus() - заменяет унарный минус на ~
+void replaceUnaryMinus(string& str) {
+    string operators = "+-*/";
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (str[i] == '-' && (i == 0 || str[i - 1] == '(' || operators.find(str[i - 1]) != string::npos)) {
+            str[i] = '~';
+        }
+    }
+}
+
+//convert() - преобразует строку в строку без пробелов и с замененными унарными минусами
+bool convert(string& str) {
     bool isValid = removeSpaces(str);
-    cout << str << " " << isValid << endl;
+    if (isValid) {
+        replaceUnaryMinus(str);
+    } else {
+        cout << "Ошибка: неправильная расстановка скобок в выражении." << endl;
+    }
+    return isValid;
+}
+
+int main(){
+    string str = "-(10 + -(5+2))";
+    convert(str);
+    cout << str << endl;
     return 0;
 }
