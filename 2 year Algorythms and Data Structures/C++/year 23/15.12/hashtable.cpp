@@ -108,6 +108,7 @@ int main()
     db.insert("Ivan", 21, 'M');
     db.insert("Irina", 22, 'F');
     db.insert("Bob", 23, 'M');
-    db.select_name("Irina"); 
+    db.select_name("Irina");
+
     return 0;
 }
